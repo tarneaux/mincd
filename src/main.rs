@@ -29,7 +29,6 @@ fn watch(url: String, branch: String, interval: Duration) {
             }
         };
         if current_commit != last_commit {
-            println!("{} changed", url);
             std::process::exit(0);
         }
         sleep(interval);

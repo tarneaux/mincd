@@ -16,7 +16,7 @@ fn main() {
 }
 
 fn watch(url: String, branch: String, interval: Duration) {
-    let mut last_commit = get_last_commit_hash(&url, &branch).unwrap_or_else(|| {
+    let last_commit = get_last_commit_hash(&url, &branch).unwrap_or_else(|| {
         println!("Could not get last commit hash, exiting");
         std::process::exit(1);
     });
@@ -30,7 +30,7 @@ fn watch(url: String, branch: String, interval: Duration) {
         };
         if current_commit != last_commit {
             println!("{} changed", url);
-            last_commit = current_commit;
+            std::process::exit(0);
         }
         sleep(interval);
     }

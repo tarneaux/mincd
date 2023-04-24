@@ -2,6 +2,14 @@
 name = "mincd"
 version = "0.1.0"
 edition = "2021"
+authors = ["tarneo"]
+description = "A minimal remote Git repository watcher"
+license = "GPL-2.0"
+license-file = "LICENSE"
+readme = "README.md"
+repository = "https://git.tarneo.fr/tarneo/mincd"
+keywords = ["git", "watcher", "minimal"]
+categories = ["command-line-utilities"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

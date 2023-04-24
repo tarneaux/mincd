@@ -57,10 +57,10 @@ fn get_last_commit_hash(url: &String, branch: &String) -> Option<String> {
 }
 
 fn print_usage() {
-    println!("Usage: mincd URL BRANCH <INTERVAL>");
-    println!("  URL: URL of the git repository");
-    println!("  BRANCH: branch to watch (usually main or master)");
-    println!("  INTERVAL: interval in seconds (default: 60)");
+    println!("Usage: mincd <url> <branch> [interval]");
+    println!("  url: URL of the git repository");
+    println!("  branch: branch to watch (usually main or master)");
+    println!("  interval: interval in seconds (default: 60)");
 }
 
 fn get_args() -> Option<(String, String, Duration)> {

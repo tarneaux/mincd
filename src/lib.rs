@@ -1,4 +1,37 @@
+use std::process::exit;
 use std::process::Command;
+use std::thread::sleep;
+use std::time::Duration;
+
+pub fn wait_for_change(
+    url: String,
+    branch: String,
+    interval: Duration,
+    local_path: Option<String>,
+) {
+    let last_commit_hash = match local_path {
+        Some(path) => get_last_local_commit_hash(&path, &branch),
+        None => get_last_remote_commit_hash(&url, &branch),
+    }
+    .unwrap_or_else(|| {
+        println!("Could not get last commit hash, exiting.");
+        exit(1);
+    });
+    loop {
+        let current_commit_hash = match get_last_remote_commit_hash(&url, &branch) {
+            Some(commit) => commit,
+            None => {
+                println!("Could not get last commit hash, skipping");
+                sleep(interval);
+                continue;
+            }
+        };
+        if current_commit_hash != last_commit_hash {
+            exit(0);
+        }
+        sleep(interval);
+    }
+}
 
 pub fn get_last_remote_commit_hash(url: &String, branch: &String) -> Option<String> {
     let output = Command::new("git")

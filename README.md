@@ -9,7 +9,7 @@ I am using it to deploy [renn.es](https://renn.es) to my server using docker.
 cargo install mincd
 ```
 
-## Usage
+## CLI Usage
 ```
 Usage: mincd <url> <branch> [-i <interval>] [-p <local/path>]
   url: URL of the git repository

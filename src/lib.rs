@@ -1,4 +1,4 @@
-use std::process::exit;
+use std::fmt::Display;
 use std::process::Command;
 use std::thread::sleep;
 use std::time::Duration;
@@ -8,28 +8,49 @@ pub fn wait_for_change(
     branch: String,
     interval: Duration,
     local_path: Option<String>,
-) {
+) -> Result<(), GitWatcherError> {
     let last_commit_hash = match local_path {
-        Some(path) => get_last_local_commit_hash(&path, &branch),
-        None => get_last_remote_commit_hash(&url, &branch),
-    }
-    .unwrap_or_else(|| {
-        println!("Could not get last commit hash, exiting.");
-        exit(1);
-    });
+        Some(path) => match get_last_local_commit_hash(&path, &branch) {
+            Some(commit) => commit,
+            None => {
+                return Err(GitWatcherError::LocalHashCheckError);
+            }
+        },
+        None => match get_last_remote_commit_hash(&url, &branch) {
+            Some(commit) => commit,
+            None => {
+                return Err(GitWatcherError::RemoteHashCheckError);
+            }
+        },
+    };
     loop {
         let current_commit_hash = match get_last_remote_commit_hash(&url, &branch) {
             Some(commit) => commit,
             None => {
-                println!("Could not get last commit hash, skipping");
-                sleep(interval);
-                continue;
+                return Err(GitWatcherError::LoopError);
             }
         };
         if current_commit_hash != last_commit_hash {
-            exit(0);
+            return Ok(());
         }
         sleep(interval);
+    }
+}
+
+#[derive(Debug)]
+pub enum GitWatcherError {
+    LocalHashCheckError,
+    RemoteHashCheckError,
+    LoopError,
+}
+
+impl Display for GitWatcherError {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            GitWatcherError::LocalHashCheckError => write!(f, "Local hash check error"),
+            GitWatcherError::RemoteHashCheckError => write!(f, "Remote hash check error"),
+            GitWatcherError::LoopError => write!(f, "Loop error"),
+        }
     }
 }
 

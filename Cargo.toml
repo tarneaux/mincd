@@ -1,12 +1,12 @@
 [package]
 name = "mincd"
-version = "0.1.5"
+version = "0.1.6"
 edition = "2021"
 authors = ["tarneo"]
 description = "A minimal remote Git repository watcher"
 license = "GPL-2.0"
 readme = "README.md"
-repository = "https://git.tarneo.fr/tarneo/mincd"
+repository = "https://github.com/tarneaux/mincd"
 keywords = ["git", "watcher", "minimal"]
 categories = ["command-line-utilities"]
 
